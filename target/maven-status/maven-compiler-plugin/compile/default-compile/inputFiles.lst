@@ -1,2 +1,6 @@
+/Users/redchamp/Java/hangman/src/main/java/net/redchamp/hangman/domain/Hangman.java
 /Users/redchamp/Java/hangman/src/main/java/net/redchamp/hangman/Hangman.java
+/Users/redchamp/Java/hangman/src/main/java/net/redchamp/hangman/package-info.java
 /Users/redchamp/Java/hangman/src/main/java/net/redchamp/hangman/servlets/HangmanServlet.java
+/Users/redchamp/Java/hangman/src/main/java/net/redchamp/hangman/servlets/NewGameServlet.java
+/Users/redchamp/Java/hangman/src/main/java/net/redchamp/hangman/servlets/MoveServlet.java

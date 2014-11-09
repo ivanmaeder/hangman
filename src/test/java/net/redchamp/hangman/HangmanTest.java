@@ -1,19 +1,65 @@
 package net.redchamp.hangman;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import java.util.*;
 
-public class HangmanTest extends TestCase {
-    public HangmanTest(String testName) {
-        super(testName);
+import junit.framework.*;
+import org.json.*;
+import org.mockito.*;
+
+import net.redchamp.hangman.domain.*;
+
+import static junit.framework.Assert.*;
+
+public class HangmanTest extends Mockito {
+    public void testParseFromJSON() throws Exception {
+        Hangman game = Hangman.newFromJSON("{ phrase: 'Example Phrase' }");
+
+        assertEquals(game.getPhrase(), "Example Phrase");
     }
 
-    public static Test suite() {
-        return new TestSuite(HangmanTest.class);
+    public void testCorrectlyChosenLetters() throws Exception {
+        List<Character> expected = new ArrayList<Character>();
+        expected.add('E');
+
+        Hangman game = new Hangman("Example Phrase");
+        game.chooseLetter('E');
+        List<Character> found = game.getCorrectlyChosenLetters();
+
+        assertEquals(expected, found);
     }
 
-    public void testApp() {
-        assertTrue(true);
+    public void testRemainingMovesAfterCorrectChoice() throws Exception {
+        Hangman game = new Hangman("Example Phrase");
+        game.chooseLetter('E');
+
+        assertEquals(Hangman.POSSIBLE_MOVES, game.calculateRemainingMoves());
+    }
+
+    public void testIncorrectlyChosenLetters() throws Exception {
+        List<Character> expected = new ArrayList<Character>();
+        expected.add('Z');
+
+        Hangman game = new Hangman("Example Phrase");
+        game.chooseLetter('Z');
+        List<Character> found = game.getIncorrectlyChosenLetters();
+
+        assertEquals(expected, found);
+    }
+
+    public void testRemainingMovesAfterIncorrectChoice() throws Exception {
+        Hangman game = new Hangman("Example Phrase");
+        game.chooseLetter('Z');
+
+        assertEquals(Hangman.POSSIBLE_MOVES - 1, game.calculateRemainingMoves());
+    }
+
+    public void testToJSON() {
+        Hangman game = new Hangman("Example Phrase");
+
+        JSONObject obj = new JSONObject(game.toJSON());
+
+        assertTrue(obj.getString("phrase").length() > 0);
+        assertTrue(obj.getBoolean("win") ? true : true);
+        assertTrue(obj.getInt("remaining_moves") == 6);
     }
 }

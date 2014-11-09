@@ -6,11 +6,15 @@
     <display-name>Hangman</display-name>
     <description>-</description>
     <servlet>
-        <servlet-name>HangmanServlet</servlet-name>
-        <servlet-class>net.redchamp.hangman.servlets.HangmanServlet</servlet-class>
+        <servlet-name>NewGameServlet</servlet-name>
+        <servlet-class>net.redchamp.hangman.servlets.NewGameServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MoveServlet</servlet-name>
+        <servlet-class>net.redchamp.hangman.servlets.MoveServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>HangmanServlet</servlet-name>
-        <url-pattern>/game/</url-pattern>
+        <servlet-name>MoveServlet</servlet-name>
+        <url-pattern>/move/</url-pattern>
     </servlet-mapping>
-</web-app> 
+</web-app>

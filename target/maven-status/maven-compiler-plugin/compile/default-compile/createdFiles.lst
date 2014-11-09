@@ -1,2 +1,5 @@
 net/redchamp/hangman/servlets/HangmanServlet.class
-net/redchamp/hangman/Hangman.class
+net/redchamp/hangman/servlets/MoveServlet.class
+net/redchamp/hangman/data/Phrase.class
+net/redchamp/hangman/servlets/NewGameServlet.class
+net/redchamp/hangman/domain/Hangman.class
