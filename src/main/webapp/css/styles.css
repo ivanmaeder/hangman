@@ -1,0 +1,50 @@
+body {
+    font-family: sans-serif;
+}
+
+#instruction {
+    margin-top: 20px;
+    font-size: 12pt;
+    font-family: monospace;
+}
+
+#attempts-remaining {
+    display: inline;
+}
+
+em {
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: underline;
+}
+
+#phrase {
+    letter-spacing: 0.15em;
+    font-size: 70pt;
+    font-family: monospace;
+    margin-bottom: 40px;
+}
+
+#letters {
+    font-size: 18pt;
+
+    /* Clear floating elements */
+    overflow: auto;
+    width: 100%;
+}
+
+#letters > div {
+    display: table-cell;
+    text-align: center;
+    border: 1px solid #F1F1F1;
+    border-radius: 5px;
+    background-color: #FAFAFA;
+    width: 38px;
+
+    /* CSS makes vertical centering fun */
+    height: 33px;
+    padding-top: 5px;
+
+    float: left;
+    margin: 0 3px 3px 0;
+}
