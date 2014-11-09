@@ -1,8 +1,12 @@
 package net.redchamp.hangman.data;
 
+import java.util.Random;
+
 import com.mongodb.*;
 
 public class Phrase {
+    private static Random random = new Random();
+
     public static String fetchRandomPhrase() {
         try {
             MongoClient mongoClient = new MongoClient();
@@ -10,24 +14,11 @@ public class Phrase {
             DB db = mongoClient.getDB("hangman");
             DBCollection movies = db.getCollection("movies");
 
-            /* Movies are stored in this format:
-
-               {random: Math.random(), title: "The Shawshank Redemption", year: 1994}
-
-               Using `random` like that is the recommended method for
-               obtaining random documents:
-
-               http://cookbook.mongodb.org/patterns/random-attribute/
-             */
-            double random = Math.random();
-
-            BasicDBObject query = new BasicDBObject("random", new BasicDBObject("$lt", random));
-            DBObject randomMovie = movies.findOne(query);
-
-            if (randomMovie == null) {
-                query = new BasicDBObject("random", new BasicDBObject("$gt", random));
-                randomMovie = movies.findOne(query);
-            }
+            DBObject randomMovie;
+            do {
+                int i = random.nextInt((int) movies.getCount());
+                randomMovie = movies.find().skip(i).next();
+            } while (randomMovie == null);
 
             return randomMovie.get("title").toString();
         }

@@ -1,20 +1,19 @@
-var phrase; //TODO put all this in an object or something
-
-var TOTAL_POSSIBLE_INCORRECT_MOVES = 6; //TODO load all this from back-end, including partially complete games
-var incorrectMoves = 0;
-var selectedLetters = [];
+var hangman; //global state
 
 $(document).ready(function() {
-    phrase = fetchNewPhrase();
-    drawPhrase(phrase);
-    drawLetters();
+    initialiseHangman();
 
+    drawEmptyBoard();
+    drawKeyboard();
+
+    //listen for clicks on the on-screen keyboard
     $('.letter').click(function() {
         var letter = $(this).html();
 
         selectLetter(letter);
     });
 
+    //listen for presses on the real keyboard
     $('html').keypress(function(e) {
         var key = String.fromCharCode(e.which);
         var match = /[A-Z]/i.exec(key);
@@ -43,7 +42,7 @@ function alphabet() {
     return alphabet;
 }
 
-function drawLetters() {
+function drawKeyboard() {
     var letters = alphabet();
 
     letters.forEach(function(e) {
@@ -51,23 +50,76 @@ function drawLetters() {
     });
 }
 
-function fetchNewPhrase() {
-    return 'Pulp Fiction'.toUpperCase();
+function initialiseHangman() {
+    $.ajax({
+        url: '/start/',
+        async: false,
+        dataType: 'json',
+        success: function(data) {
+            hangman = {
+                phrase: data.phrase.toUpperCase(),
+                remainingMoves: data.remaining_moves,
+                selectedLetters: []
+            };
+        }
+    });
 }
 
-function drawPhrase(phrase) {
+function drawEmptyBoard() {
     var dashes = '';
 
-    for (var i = 0; i < phrase.length; i++) {
-        if (/[A-Z]/i.exec(phrase[i])) {
+    for (var i = 0; i < hangman.phrase.length; i++) {
+        if (/[A-Z]/i.exec(hangman.phrase[i])) {
             dashes += '_';
         }
         else {
-            dashes += phrase[i];
+            dashes += hangman.phrase[i];
         }
     }
 
     $('#phrase').html(dashes);
+}
+
+function selectLetter(letter) {
+    if (hangman.selectedLetters.indexOf(letter) >= 0) {
+        return;
+    }
+
+    if (hangman.remainingMoves > 0) {
+        $.ajax({
+            url: '/move/',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'letter': letter
+            },
+            success: function(data) {
+                hangman.remainingMoves = data.remaining_moves;
+                hangman.selectedLetters.push(letter);
+
+                updateKeyboard(letter);
+                updateBoard(letter);
+                updateAttemptsRemaining();
+
+                if (data.win) {
+                    $('#instruction').hide();
+                    $('#win-message').show();
+                }
+
+                if (data.remaining_moves == 0) {
+                    $('#instruction').hide();
+                    $('#lose-message').show();
+                    $('#phrase').css('color', '#FF0000');
+                }
+            }
+        });
+    }
+}
+
+function updateKeyboard(letter) {
+    var letterElement = findLetterElement(letter);
+
+    $(letterElement).css('color', '#F1F1F1');
 }
 
 function findLetterElement(letter) {
@@ -83,47 +135,21 @@ function findLetterElement(letter) {
     return letterElement;
 }
 
-function selectLetter(letter) {
-    if (selectedLetters.indexOf(letter) >= 0) {
-        return;
-    }
-
-    if (incorrectMoves < TOTAL_POSSIBLE_INCORRECT_MOVES) {
-        var letterElement = findLetterElement(letter);
-
-        $(letterElement).css('color', '#F1F1F1');
-        /*
-        Red color scheme for incorrect letters:
-            #FA9898
-            #FF9C9C
-        */
-        //send to server
-        //animate in
-        //display as a letter chosen
-        selectedLetters.push(letter);
-
-        var currentPhraseDisplayed = $('#phrase').html();
-        var newPhrase = '';
-        var correctMove = false;
-        for (var i = 0; i < phrase.length; i++) {
-            if (phrase[i] == letter) {
-                newPhrase += letter;
-                correctMove = true;
-            }
-            else {
-                newPhrase += currentPhraseDisplayed[i];
-            }
+function updateBoard(letter) {
+    var currentPhraseDisplayed = $('#phrase').html();
+    var newPhrase = '';
+    for (var i = 0; i < hangman.phrase.length; i++) {
+        if (hangman.phrase[i] == letter) {
+            newPhrase += letter;
         }
-        $('#phrase').html(newPhrase);
-
-        if (!correctMove) {
-            incorrectMoves++;
-
-            updateAttemptsRemaining();
+        else {
+            newPhrase += currentPhraseDisplayed[i];
         }
     }
+
+    $('#phrase').html(newPhrase);
 }
 
 function updateAttemptsRemaining() {
-    $('#attempts-remaining').html(TOTAL_POSSIBLE_INCORRECT_MOVES - incorrectMoves);
+    $('#attempts-remaining').html(hangman.remainingMoves);
 }

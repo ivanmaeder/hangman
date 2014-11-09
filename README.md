@@ -1,22 +1,24 @@
 #Hangman
+##Requirements
+Tested with:
+
+- Jetty 9.2.3
+- MongoDB version 2.6.5
+- Maven 3.2.3
+
 ##Instructions
-Clone project:
+Start MongoDB. Load the `data/hangman.js` file in a database named `hangman`. This contains the list of phrases used by the game.
 
-```
-clone http://...
-```
-
-Start MongoDB (version 2.6.5) using the database path `data/db/` from the main project directory. E.g.,
-
-```
-cd hangman/
-sudo mongod -dbpath ./data/db/
-```
-
-With Maven (version 3.2.3), start the server,
+Start the server using Maven:
 
 ```
 mvn jetty:run
+```
+
+Point your browser to:
+
+```
+http://localhost:8080/
 ```
 
 ##Tests

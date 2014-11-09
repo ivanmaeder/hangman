@@ -14,7 +14,7 @@ public class HangmanTest extends Mockito {
     public void testParseFromJSON() throws Exception {
         Hangman game = Hangman.newFromJSON("{ phrase: 'Example Phrase' }");
 
-        assertEquals(game.getPhrase(), "Example Phrase");
+        assertTrue(game.getPhrase().equalsIgnoreCase("Example Phrase"));
     }
 
     public void testCorrectlyChosenLetters() throws Exception {
@@ -61,5 +61,21 @@ public class HangmanTest extends Mockito {
         assertTrue(obj.getString("phrase").length() > 0);
         assertTrue(obj.getBoolean("win") ? true : true);
         assertTrue(obj.getInt("remaining_moves") == 6);
+    }
+    
+    public void testIgnoresNonLetters() {
+        Hangman game = new Hangman("Testing 1-2-3");
+
+        assertEquals(game.calculateWinStatus(), false);
+
+        game.chooseLetter('T');
+        game.chooseLetter('E');
+        game.chooseLetter('S');
+        game.chooseLetter('T');
+        game.chooseLetter('I');
+        game.chooseLetter('N');
+        game.chooseLetter('G');
+
+        assertEquals(game.calculateWinStatus(), true);
     }
 }

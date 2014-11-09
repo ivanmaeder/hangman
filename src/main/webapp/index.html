@@ -8,7 +8,17 @@
     <script src="js/script.js"></script>
   </head>
   <body>
-    <div id="instruction">Try to guess the <em>film</em>. Attempts remaining: <div id="attempts-remaining">6</div>/6</div>
+    <div class="header">
+        <div id="instruction">
+            Try to guess the <em>film</em>. Attempts remaining: <div id="attempts-remaining">6</div>/6
+        </div>
+        <div id="win-message" style="display: none">
+            <b>You win!</b> <a href="/">Play again</a>
+        </div>
+        <div id="lose-message" style="display: none">
+            Game Over. <a href="/">Try again</a>
+        </div>
+    </div>
     <div id="phrase"></div>
     <div id="letters"></div>
   </body>

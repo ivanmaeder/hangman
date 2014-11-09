@@ -14,12 +14,9 @@ public class Hangman {                          //HangmanSession ?
     private String phrase;
     private List<Character> correctlyChosenLetters;
     private List<Character> incorrectlyChosenLetters;
-    //private Set<Character> remainingLetters;
 
     public Hangman(String phrase) {
-        this.phrase = phrase;
-
-        //this.remainingLetters = lettersFromString();
+        this.phrase = phrase.toUpperCase();
 
         this.correctlyChosenLetters = new ArrayList<Character>();
         this.incorrectlyChosenLetters = new ArrayList<Character>();
@@ -52,10 +49,6 @@ public class Hangman {                          //HangmanSession ?
         return this.incorrectlyChosenLetters;
     }
 
-    //public Set<Character> getRemainingLetters() {
-        //return this.remainingLetters;
-    //}
-
     /**
      * Make a move.
      *
@@ -82,7 +75,11 @@ public class Hangman {                          //HangmanSession ?
 
         int stringLength = this.phrase.length();
         for (int i = 0; i < stringLength; i++) {
-            remainingLetters.add(this.phrase.charAt(i));
+            char c = this.phrase.charAt(i);
+
+            if (c >= 'A' && c <= 'Z') {
+                remainingLetters.add(this.phrase.charAt(i));
+            }
         }
 
         for (char correctlyChosenLetter : getCorrectlyChosenLetters()) {
@@ -94,9 +91,9 @@ public class Hangman {                          //HangmanSession ?
 
     public String toJSON() {
         return "{\n" +
-               "    phrase: '" + this.phrase + "',\n" +
-               "    win: " + calculateWinStatus() + ",\n" +
-               "    remaining_moves: " + calculateRemainingMoves() + "\n" +
+               "    \"phrase\": \"" + this.phrase + "\",\n" +
+               "    \"win\": " + calculateWinStatus() + ",\n" +
+               "    \"remaining_moves\": " + calculateRemainingMoves() + "\n" +
                "}";
     }
 }
