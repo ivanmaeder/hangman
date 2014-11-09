@@ -8,6 +8,12 @@ import com.mongodb.*;
 
 import net.redchamp.hangman.domain.*;
 
+/**
+ * Advance in a previously initiated game of hangman.
+ *
+ * Make a move in a game of hangman that in this session is currently
+ * in progress.
+ */
 public class MoveServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Hangman game = (Hangman) request.getSession().getAttribute("currentGame");

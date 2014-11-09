@@ -26,30 +26,6 @@ $(document).ready(function() {
     });
 });
 
-function alphabet() {
-    var alphabet = [];
-
-    var A = "A".charCodeAt(0);
-    var Z = "Z".charCodeAt(0);
-
-    //for A..Z
-    for (var i = A; i <= Z; i++) {
-        var letter = String.fromCharCode(i);
-
-        alphabet.push(letter);
-    }
-
-    return alphabet;
-}
-
-function drawKeyboard() {
-    var letters = alphabet();
-
-    letters.forEach(function(e) {
-        $('#letters').append('<div class="letter">' + e + '</div>');
-    });
-}
-
 function initialiseHangman() {
     $.ajax({
         url: '/start/',
@@ -80,6 +56,30 @@ function drawEmptyBoard() {
     $('#phrase').html(dashes);
 }
 
+function drawKeyboard() {
+    var letters = alphabet();
+
+    letters.forEach(function(e) {
+        $('#letters').append('<div class="letter">' + e + '</div>');
+    });
+}
+
+function alphabet() {
+    var alphabet = [];
+
+    var A = "A".charCodeAt(0);
+    var Z = "Z".charCodeAt(0);
+
+    //for A..Z
+    for (var i = A; i <= Z; i++) {
+        var letter = String.fromCharCode(i);
+
+        alphabet.push(letter);
+    }
+
+    return alphabet;
+}
+
 function selectLetter(letter) {
     if (hangman.selectedLetters.indexOf(letter) >= 0) {
         return;
@@ -102,14 +102,11 @@ function selectLetter(letter) {
                 updateAttemptsRemaining();
 
                 if (data.win) {
-                    $('#instruction').hide();
-                    $('#win-message').show();
+                    showWin();
                 }
 
                 if (data.remaining_moves == 0) {
-                    $('#instruction').hide();
-                    $('#lose-message').show();
-                    $('#phrase').css('color', '#FF0000');
+                    showGameOver();
                 }
             }
         });
@@ -152,4 +149,15 @@ function updateBoard(letter) {
 
 function updateAttemptsRemaining() {
     $('#attempts-remaining').html(hangman.remainingMoves);
+}
+
+function showWin() {
+    $('#instruction').hide();
+    $('#win-message').show();
+}
+
+function showGameOver() {
+    $('#instruction').hide();
+    $('#lose-message').show();
+    $('#phrase').css('color', '#FF0000');
 }

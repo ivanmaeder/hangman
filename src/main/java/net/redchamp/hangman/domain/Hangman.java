@@ -7,9 +7,15 @@ import org.json.*;
 /**
  * A game of hangman.
  *
+ * The logic of starting and advancing a game of hangman is contained
+ * herel. An object of this class maintains the state of a game and can
+ * be queried to determine progress.
+ *
+ * Begin by instantiating an object, and advance the game through
+ * `chooseLetter(char)`.
  */
-public class Hangman {                          //HangmanSession ?
-    public static final int POSSIBLE_MOVES = 6; //HangmanRules ?
+public class Hangman {
+    public static final int POSSIBLE_MOVES = 6;
 
     private String phrase;
     private List<Character> correctlyChosenLetters;
@@ -20,17 +26,6 @@ public class Hangman {                          //HangmanSession ?
 
         this.correctlyChosenLetters = new ArrayList<Character>();
         this.incorrectlyChosenLetters = new ArrayList<Character>();
-    }
-
-    private Set<Character> lettersFromString() {
-        Set<Character> letters = new HashSet<Character>();
-
-        int stringLength = this.phrase.length();
-        for (int i = 0; i < stringLength; i++) {
-            letters.add(this.phrase.charAt(i));
-        }
-
-        return letters;
     }
 
     public static Hangman newFromJSON(String json) {
