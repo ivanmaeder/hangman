@@ -9,7 +9,7 @@
   <url>http://maven.apache.org</url>
   <properties>
     <!-- Jetty -->
-    <jetty.version>9.2.3.v20140905</jetty.version>
+    <jetty.version>9.4.41.v20210516</jetty.version>
     <!-- MongoDB -->
     <mongo.version>2.12.4</mongo.version>
   </properties>
